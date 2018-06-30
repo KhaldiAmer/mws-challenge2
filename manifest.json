@@ -1,0 +1,21 @@
+{
+  "short_name": "CC",
+  "name": "Currency Converter",
+  "icons": [
+    {
+      "src": "euro.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "euro-currency-symbol.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#eee",
+  "display": "standalone",
+  "scope": "/",
+  "theme_color": "#eee"
+}
