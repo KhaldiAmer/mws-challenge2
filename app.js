@@ -175,12 +175,12 @@ function makeRequest () {
         .then(res => res.json())
         .then(data => {
             let cRate = data[query];
-            result.innerText = parseInt(value) * parseFloat(cRate) + " " + to
+            result.innerText = (parseInt(value) * parseFloat(cRate)).toFixed(2) + " " + to
             idbKeyval.set(query,data[query])
         })
         .catch(err => {
             return idbKeyval.get(query).then(cRate => {
-                if (cRate) return result.innerText = parseInt(value) * parseFloat(cRate) + " " + to;
+                if (cRate) return result.innerText = (parseInt(value) * parseFloat(cRate)).toFixed(2) + " " + to;
                 return result.innerText = "Currency wasn't saved before!"
             })
 
