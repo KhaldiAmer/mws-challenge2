@@ -1,221 +1,55 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>CurrencyConverter</title>
-<style>
-  body {
-    margin: 0 auto;
-    padding: 0;
-    display: flex;
-  }
-  form {
-     margin: 0 auto;
-     padding: 50px;
-  }
-  div {
-     margin: 0 auto;
-  }
-</style>
+    <title>CurrencyConverter</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
+    <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
+    <script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
+    <style>
+        button {
+            margin:5px;
+        }
+        #result {
+            color:rgb(0,123,255);
+            font-size:3em;
+
+        }
+    </style>
 </head>
 <body>
+<script src="https://cdn.jsdelivr.net/npm/idb-keyval@3/dist/idb-keyval-iife.min.js"></script>
+<ons-page>
+    <div class="toolbar">
+        <div class="toolbar__center">CurrencyConverter</div>
+    </div>
+    <div style="text-align: center; margin-top: 30px;">
+        <ons-input type="number" input-id="myinput" min=0 class="text-input text-input--underbar" placeholder="Amount">
+    </div>
+    <div style="text-align: center; margin-top: 30px;">
+        <h3>From:</h3>
+        <ons-select  name="currs" select-id="currs">
+        </ons-select>
+    </div>
+    <div style="text-align: center; margin-top: 30px;">
+        <h3>To:</h3>
+        <ons-select name="currsTo" select-id="currsTo">
+        </ons-select>
+    </div>
+    <section style="padding: 8px">
+        <ons-button modifier="large" onclick="makeRequest()">Submit</ons-button>
+    </section>
+    <div id="result" style="text-align: center; margin-top: 30px;">
+    </div>
+    <svg class="progress-circular progress-circular--indeterminate" style="display:none;">
+        <circle class="progress-circular__background"/>
+        <circle class="progress-circular__primary progress-circular--indeterminate__primary"/>
+        <circle class="progress-circular__secondary progress-circular--indeterminate__secondary"/>
+    </svg>
+<script src="app.js">
 
-<form id="form">
-  <div >
-    <label for="input">input</label>
-      <input type="number" id="input" min=0 >
-  </div>
-  <label for="currs">select from</label>
-  <select name="currs" id="currs">
-  </select>
-  <label for="currsTo">select to</label>
-  <select name="currsTo" id="currsTo">
-  </select>
-  <button type="submit">submit</button>
-</form>
-<script>
-const currencies = 
- ["AED",
-"AFN",
-"ALL",
-"AMD",
-"AOA",
-"ARS",
-"AUD",
-"AWG",
-"AZN",
-"BAM",
-"BBD",
-"BDT",
-"BGN",
-"BHD",
-"BIF",
-"BND",
-"BOB",
-"BRL",
-"BSD",
-"BTN",
-"BWP",
-"BYN",
-"BZD",
-"CAD",
-"CDF",
-"CHF",
-"CLP",
-"CNY",
-"COP",
-"CRC",
-"CUP",
-"CZK",
-"DJF",
-"DKK",
-"DOP",
-"DZD",
-"EGP",
-"ERN",
-"ETB",
-"EUR",
-"FJD",
-"GBP",
-"GEL",
-"GHS",
-"GIP",
-"GMD",
-"GNF",
-"GTQ",
-"GYD",
-"HKD",
-"HNL",
-"HRK",
-"HTG",
-"HUF",
-"IDR",
-"ILS",
-"INR",
-"IQD",
-"IRR",
-"ISK",
-"JMD",
-"JOD",
-"JPY",
-"KES",
-"KGS",
-"KHR",
-"KMF",
-"KPW",
-"KRW",
-"KWD",
-"KYD",
-"KZT",
-"LAK",
-"LBP",
-"LKR",
-"LRD",
-"LSL",
-"LVL",
-"LYD",
-"MAD",
-"MDL",
-"MGA",
-"MKD",
-"MMK",
-"MNT",
-"MOP",
-"MRO",
-"MUR",
-"MVR",
-"MWK",
-"MXN",
-"MYR",
-"MZN",
-"NAD",
-"NGN",
-"NIO",
-"NOK",
-"NPR",
-"NZD",
-"OMR",
-"PAB",
-"PEN",
-"PGK",
-"PHP",
-"PKR",
-"PLN",
-"PYG",
-"QAR",
-"RON",
-"RSD",
-"RUB",
-"RWF",
-"SAR",
-"SBD",
-"SCR",
-"SDG",
-"SEK",
-"SGD",
-"SHP",
-"SLL",
-"SOS",
-"SRD",
-"STD",
-"SYP",
-"SZL",
-"THB",
-"TJS",
-"TMT",
-"TND",
-"TOP",
-"TRY",
-"TTD",
-"TWD",
-"TZS",
-"UAH",
-"UGX",
-"USD",
-"UYU",
-"UZS",
-"VEF",
-"VND",
-"VUV",
-"WST",
-"XAF",
-"XCD",
-"XOF",
-"XPF",
-"YER",
-"ZAR",
-"ZMW"];
-function fillOptions (currencies) {
-  let currs = document.getElementById("currs");
-  let currsTo = document.getElementById("currsTo");
-  currencies.forEach(curr => {
-    let option = document.createElement("option");
-    option.innerText = curr;
-    option.setAttribute("value", curr);
-    let optionClone = option.cloneNode(true);
-    currs.appendChild(option);
-    currsTo.appendChild(optionClone);
-  } )
-}
-
-function preventDB() {
-  let form = document.getElementById("form");
-  form.addEventListener("submit", event => {
-    event.preventDefault();
-    makeRequest();
-  })
-}
-function makeRequest () {
-  let from = document.getElementById("currs").value;
-  let to = document.getElementById("currsTo").value;
-  let query = `${from}_${to}`
-  fetch(`https://free.currencyconverterapi.com/api/v5/convert?q=${query}&compact=ultra`)
-    .then(res => res.json())
-    .then(data => alert(data[query]))
-    .catch(err => console.log(err))
-}
-preventDB();
-fillOptions(currencies);
 </script>
+    </ons-page>
 </body>
 </html>
 
