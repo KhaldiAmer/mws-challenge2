@@ -189,7 +189,7 @@ function makeRequest () {
 
 
 if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js').then(function(reg) {
+    navigator.serviceWorker.register('sw.js').then(function(reg) {
 
         if(reg.installing) {
             console.log('Service worker installing');
