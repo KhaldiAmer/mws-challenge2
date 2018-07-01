@@ -190,7 +190,7 @@ function makeRequest () {
 
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js', {
-        scope: '.'
+        scope: './'
     }).then(function(reg) {
 
         if(reg.installing) {
